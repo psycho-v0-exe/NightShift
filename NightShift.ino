@@ -43,15 +43,20 @@ void segTime(){
 }
 
 void setup() {
-  if (!rtc.begin()) {
-    while (1);
-  }
-
   byte hardwareConfiguration=COMMON_ANODE, numDigits=4;
   byte digitPins[]={d1,d2,d3,d4}, segmentPins[]={a,b,c,d,e,f,g,p};
   bool resistorOnSegments=true, updateWithDelays=false, leadingZeros=false, disableDecPoint=false;
   Display.begin(hardwareConfiguration,numDigits,digitPins,segmentPins,resistorOnSegments,updateWithDelays,leadingZeros,disableDecPoint);
   Display.setBrightness(100);
+
+  Display.setNumber(0);
+  Display.refreshDisplay();
+
+  if (!rtc.begin()) {
+    while (1);
+    Display.setNumber(8888);
+    Display.refreshDisplay();
+  }
 
   pinMode(rly,OUTPUT);
   pinMode(cs,INPUT);
